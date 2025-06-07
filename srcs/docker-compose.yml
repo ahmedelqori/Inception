@@ -1,0 +1,112 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:ael-qori
+    build:
+      context: ./requirements/nginx/.
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - inception-net
+    volumes:
+      - wordpress-vol:/var/www/html:ro
+    env_file:
+      - .env
+    restart: always
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:ael-qori
+    build:
+      context: ./requirements/mariadb/.
+    networks:
+      - inception-net
+    volumes:
+      - mariadb-vol:/var/lib/mysql
+    env_file:
+      - .env
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress:ael-qori
+    build:
+      context: ./requirements/wordpress/.
+    networks:
+      - inception-net
+    volumes:
+      - wordpress-vol:/var/www/html:rw
+      - mariadb-vol:/var/lib/mysql:rw
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - mariadb
+  adminer:
+    container_name: adminer
+    image: adminer:ael-qori
+    build:
+      context: ./requirements/bonus/adminer/.
+    networks:
+      - inception-net
+    restart: always
+    depends_on:
+      - mariadb
+  ftp:
+    container_name: ftp
+    image: ftp:ael-qori
+    build:
+      context: ./requirements/bonus/ftp/.
+    networks:
+      - inception-net
+    env_file:
+      - .env
+    volumes:
+      - wordpress-vol:/ftp:rw
+    privileged: true
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    restart: always
+  portfolio:
+    container_name: portfolio
+    image: portfolio:ael-qori
+    build:
+      context: ./requirements/bonus/portfolio/.
+    networks:
+      - inception-net
+    restart: always
+  portainer:
+    container_name: portainer
+    image: portainer:ael-qori
+    build:
+      context: ./requirements/bonus/portainer/.
+    networks:
+      - inception-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-vol:/data
+    restart: always
+  redis:
+    container_name: redis
+    image: redis:ael-qori
+    build: 
+      context: ./requirements/bonus/redis/.
+    networks:
+      - inception-net
+    volumes:
+      - wordpress-vol:/var/www/html:rw
+    env_file:
+      - .env
+    restart: always
+
+networks:
+  inception-net:
+    driver: bridge
+volumes:
+  wordpress-vol:
+  mariadb-vol:
+  portainer-vol:
+

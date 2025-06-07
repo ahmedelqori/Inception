@@ -1,0 +1,23 @@
+{
+  "name": "ahmed-portfolio",
+  "version": "1.0.0",
+  "description": "Ahmed El Qori's Portfolio Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "express",
+    "nodejs"
+  ],
+  "author": "Ahmed El Qori",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
