@@ -38,7 +38,6 @@ services:
       - inception-net
     volumes:
       - wordpress-vol:/var/www/html:rw
-      - mariadb-vol:/var/lib/mysql:rw
     env_file:
       - .env
     restart: always
@@ -105,8 +104,25 @@ services:
 networks:
   inception-net:
     driver: bridge
+
 volumes:
   wordpress-vol:
-  mariadb-vol:
-  portainer-vol:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /home/ael-qori/data/wordpress
 
+  mariadb-vol:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /home/ael-qori/data/mariadb
+
+  portainer-vol:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /home/ael-qori/data/portainer
